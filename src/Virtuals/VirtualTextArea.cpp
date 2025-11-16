@@ -1,0 +1,72 @@
+#include "VirtualNode.hpp"
+#include <geode.devtools/include/API.hpp>
+#include <Geode/ui/MDTextArea.hpp>
+
+class VirtualTextArea : public VirtualNode, RegisterDOM<VirtualTextArea, "Text Area"> {
+    std::string m_text;
+    auto tether() { return typeinfo_cast<MDTextArea*>(m_tether.data()); }
+public:
+    VirtualTextArea() : VirtualNode(), m_text("Hello <cr>World!</cr>") {
+        m_tether = MDTextArea::create(m_text, {200, 100});
+        setContentSize({200, 100});
+        setAnchorPoint({0.5, 0.5});
+    }
+
+    VirtualTextArea(VirtualTextArea& src) : VirtualNode(src) {
+        m_text = src.m_text;
+        replaceTether(MDTextArea::create(m_text, src.getContentSize()));
+    }
+
+    void settings() override {
+        VirtualNode::settings();
+        devtools::inputMultiline("Text Area", m_text);
+    }
+
+    matjson::Value exportJSON() override {
+        auto obj = VirtualNode::exportJSON();
+    
+        obj["type"] = "Text Area";
+        obj["text"] = m_text;
+
+        return obj;
+
+    }
+
+    std::string emitCode(int indent = 0) override {
+        std::string ind(indent, ' ');
+        std::string out = fmt::format(
+            "{}Build<MDTextArea>::create(\"{}\", CCSize({}, {})\n",
+            ind,
+            m_text,
+            fmtFloat(getContentSize().width),
+            fmtFloat(getContentSize().height)
+        );
+
+        out += VirtualNode::emitAttributes(exportJSON(), indent + 4);
+        if (out.back() == '\n')
+            out.pop_back();
+
+        return out;
+    }
+
+    void importJSON(matjson::Value json) override {
+        VirtualNode::importJSON(json);
+        m_text = json["text"].asString().unwrapOr(m_text);
+    }
+
+
+
+    void updateTether() override {
+        if (tether()->getContentSize() != getContentSize()) {
+            replaceTether(MDTextArea::create(m_text, getContentSize()));
+        } else if (tether()->getString() != m_text) {
+            tether()->setString(m_text.c_str());
+        }
+
+        VirtualNode::updateTether();
+    }
+
+    VirtualNode* duplicate() override {
+        return new VirtualTextArea(*this);
+    }
+};

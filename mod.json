@@ -1,0 +1,21 @@
+{
+	"geode": "4.9.0",
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
+	},
+	"id": "camila314.uidesigner",
+	"name": "uidesigner",
+	"version": "v1.0.0",
+	"developer": "camila314",
+	"description": "",
+	"dependencies": [
+		{
+			"id": "geode.devtools",
+			"version": ">=1.12.0",
+			"importance": "required"
+		}
+	]
+}
