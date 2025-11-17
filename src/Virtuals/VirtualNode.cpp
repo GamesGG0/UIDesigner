@@ -238,8 +238,8 @@ std::string VirtualNode::emitAttributes(matjson::Value json, int indent) {
 				"Left",
 			};
 
-			if (auto anchor = layoutOpts["anchor"].asInt().unwrapOr(0))
-				out += fmt::format("{}    .anchor(Anchor::{})\n", ind, anchors[anchor]);
+			auto anchor = layoutOpts["anchor"].asInt().unwrapOr(0);
+			out += fmt::format("{}    .anchor(Anchor::{})\n", ind, anchors[anchor]);
 			if (auto offset = layoutOpts["offset"].asArray())
 				out += fmt::format("{}    .offset(ccp({}f, {}f))\n", ind, fmtFloat((*offset)[0]), fmtFloat((*offset)[1]));
 		}
