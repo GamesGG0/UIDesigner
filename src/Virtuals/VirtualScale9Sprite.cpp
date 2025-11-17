@@ -45,8 +45,6 @@ public:
         std::string out = fmt::format("{}Build<CCScale9Sprite>::create(\"{}\")\n", ind, m_spriteName);
 
         out += VirtualRGBA::emitAttributes(exportJSON(), indent + 4);
-        if (out.back() == '\n')
-            out.pop_back();
 
         return out;
     }

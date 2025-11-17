@@ -4,7 +4,6 @@
 
 class VirtualTextArea : public VirtualNode, RegisterDOM<VirtualTextArea, "Text Area"> {
     std::string m_text;
-    auto tether() { return typeinfo_cast<MDTextArea*>(m_tether.data()); }
 public:
     VirtualTextArea() : VirtualNode(), m_text("Hello <cr>World!</cr>") {
         m_tether = MDTextArea::create(m_text, {200, 100});
@@ -29,7 +28,6 @@ public:
         obj["text"] = m_text;
 
         return obj;
-
     }
 
     std::string emitCode(int indent = 0) override {
@@ -43,9 +41,6 @@ public:
         );
 
         out += VirtualNode::emitAttributes(exportJSON(), indent + 4);
-        if (out.back() == '\n')
-            out.pop_back();
-
         return out;
     }
 
@@ -54,13 +49,13 @@ public:
         m_text = json["text"].asString().unwrapOr(m_text);
     }
 
-
-
     void updateTether() override {
-        if (tether()->getContentSize() != getContentSize()) {
+        auto tether = static_cast<MDTextArea*>(m_tether.data());
+
+        if (tether->getContentSize() != getContentSize()) {
             replaceTether(MDTextArea::create(m_text, getContentSize()));
-        } else if (tether()->getString() != m_text) {
-            tether()->setString(m_text.c_str());
+        } else if (tether->getString() != m_text) {
+            tether->setString(m_text.c_str());
         }
 
         VirtualNode::updateTether();

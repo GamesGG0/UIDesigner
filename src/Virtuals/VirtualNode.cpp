@@ -102,12 +102,13 @@ std::string VirtualNode::emitCode(int indent) {
 
 	out += emitAttributes(exportJSON(), indent + 4);
 
-	if (out.back() == '\n')
-		out.pop_back();
-
 	return out;
 }
 
+template <typename T>
+T getInt(matjson::Value const& obj) {
+	return static_cast<T>(obj.asInt().unwrapOr(0));
+};
 std::string VirtualNode::emitAttributes(matjson::Value json, int indent) {
 	std::string out;
 	std::string ind(indent, ' ');
@@ -143,18 +144,123 @@ std::string VirtualNode::emitAttributes(matjson::Value json, int indent) {
 	if (auto tag = json["tag"].asInt())
 		out += fmt::format("{}.tag({})\n", ind, *tag);
 
-	if (auto layout = json["layout"]; !layout.isNull()) {
-		//TODO
+	bool hasLayout = false;
+	if (auto layout = json["layout"]; layout.get("type")) {
+		hasLayout = true;
+		std::string type = layout["type"].asString().unwrapOr("AxisLayout");
+
+		out += fmt::format("{}.layout(Build<{}>::create()\n", ind, type);
+
+		if (type == "AxisLayout") {
+			constexpr char const* axes[] = {
+				"Row",
+				"Column"
+			};
+			constexpr char const* aligns[] = {
+				"Start",
+				"Center",
+				"End",
+				"Even",
+				"Between"
+			};
+
+			out += fmt::format("{}    .axis(Axis::{})\n", ind, axes[layout["axis"].asInt().unwrapOr(0)]);
+
+
+			if (auto align = layout["alignment"].asInt().unwrapOr(0); align != 1)
+				out += fmt::format("{}    .align(AxisAlignment::{})\n", ind, aligns[align]);
+			if (auto crossAlign = layout["alignment"].asInt().unwrapOr(0); crossAlign != 1)
+				out += fmt::format("{}    .crossAlign(AxisAlignment::{})\n", ind, aligns[crossAlign]);
+			if (auto lineAlign = layout["alignment"].asInt().unwrapOr(0); lineAlign != 1)
+				out += fmt::format("{}    .lineAlign(AxisAlignment::{})\n", ind, aligns[lineAlign]);
+			if (auto gap = layout["gap"]; gap.asDouble().unwrapOr(5) != 5)
+				out += fmt::format("{}    .gap({}f)\n", ind, fmtFloat(gap));
+			if (layout["reverse"].asBool().unwrapOr(false))
+				out += fmt::format("{}    .reverse(true)\n", ind);
+			if (layout["crossReverse"].asBool().unwrapOr(false))
+				out += fmt::format("{}    .crossReverse(true)\n", ind);
+			if (!layout["autoScale"].asBool().unwrapOr(true))
+				out += fmt::format("{}    .autoScale(false)\n", ind);
+			if (layout["crossGrow"].asBool().unwrapOr(false))
+				out += fmt::format("{}    .growCross(true)\n", ind);
+			if (!layout["crossOverflow"].asBool().unwrapOr(true))
+				out += fmt::format("{}    .crossOverflow(false)\n", ind);
+			if (auto autoGrow = layout["autoGrow"]; autoGrow.isNumber())
+				out += fmt::format("{}    .autoGrow({}f)\n", ind, fmtFloat(autoGrow));
+		}
+
+		if (layout["ignoreInvisible"].asBool().unwrapOr(false))
+			out += fmt::format("{}    .ignoreInvisibleChildren(true)\n", ind);
+
+		if (out.back() == '\n')
+			out.pop_back();
+		out += ")\n";
+	}
+
+	if (auto layoutOpts = json["layoutOpts"]; layoutOpts.get("type")) {
+		log::info("what the hell, {}", layoutOpts.dump());
+
+		auto type = layoutOpts["type"].asString().unwrapOr("AxisLayoutOptions");
+
+		out += fmt::format("{}.layoutOpts(Build<{}>::create()\n", ind, type);
+
+		if (type == "AxisLayoutOptions") {
+			if (auto relScale = layoutOpts["relativeScale"].asDouble().unwrapOr(1.f); relScale != 1.f)
+				out += fmt::format("{}    .relativeScale({}f)\n", ind, fmtFloat(relScale));
+			if (layoutOpts["breakLine"].asBool().unwrapOr(false))
+				out += fmt::format("{}    .breakLine(true)\n", ind);
+			if (layoutOpts["sameLine"].asBool().unwrapOr(false))
+				out += fmt::format("{}    .sameLine(true)\n", ind);
+			if (auto prio = layoutOpts["scalePrio"].asInt().unwrapOr(0); prio != 0)
+				out += fmt::format("{}    .scalePrio({})\n", ind, prio);
+			if (auto crossAlign = layoutOpts["crossAlign"]; crossAlign.isNumber())
+				out += fmt::format("{}    .crossAlign(AxisAlignment::{})\n", ind, crossAlign.asInt().unwrap());
+			if (auto autoScale = layoutOpts["autoScale"]; autoScale.isBool())
+				out += fmt::format("{}    .autoScale({})\n", ind, autoScale.asBool().unwrap() ? "true" : "false");
+			if (auto length = layoutOpts["length"]; length.isNumber())
+				out += fmt::format("{}    .length({}f)\n", ind, fmtFloat(length));
+			if (auto prevGap = layoutOpts["prevGap"]; prevGap.isNumber())
+				out += fmt::format("{}    .prevGap({}f)\n", ind, fmtFloat(prevGap));
+			if (auto nextGap = layoutOpts["nextGap"]; nextGap.isNumber())
+				out += fmt::format("{}    .nextGap({}f)\n", ind, fmtFloat(nextGap));
+		} else if (type == "AnchorLayoutOptions") {
+			constexpr char const* anchors[] = {
+				"Center",
+				"TopLeft",
+				"Top",
+				"TopRight",
+				"Right",
+				"BottomRight",
+				"Bottom",
+				"BottomLeft",
+				"Left",
+			};
+
+			if (auto anchor = layoutOpts["anchor"].asInt().unwrapOr(0))
+				out += fmt::format("{}    .anchor(Anchor::{})\n", ind, anchors[anchor]);
+			if (auto offset = layoutOpts["offset"].asArray())
+				out += fmt::format("{}    .offset(ccp({}f, {}f))\n", ind, fmtFloat((*offset)[0]), fmtFloat((*offset)[1]));
+		}
+
+		if (out.back() == '\n')
+			out.pop_back();
+		out += ")\n";
 	}
 
 	if (getChildrenCount() > 0) {
 		out += ind + ".children(";
 		for (auto& child : CCArrayExt<VirtualNode>(getChildren())) {
-			out += "\n" + child->emitCode(indent + 4) + ",";
+			out += "\n" + child->emitCode(indent + 4);
+			if (out.back() == '\n')
+			    out.pop_back();
+			out += ",";
 		}
 		if (out.back() == ',')
 			out.pop_back();
 		out += ")\n";
+
+		if (hasLayout)
+			out += ind + ".updateLayout()\n";
 	}
 
 	return out;
@@ -219,6 +325,8 @@ matjson::Value VirtualNode::exportJSON() {
 		} else if (auto anchor = typeinfo_cast<AnchorLayout*>(layout)) {
 			layoutObj["type"] = "AnchorLayout";
 		}
+
+		obj["layout"] = layoutObj;
 	}
 
 	if (auto layoutOpts = getLayoutOptions()) {
@@ -260,8 +368,9 @@ matjson::Value VirtualNode::exportJSON() {
 	// now let's be serious here
 	if (auto parent = getParent()) {
 		if (parent->getLayout()) {
-			if (auto axis = typeinfo_cast<AxisLayout*>(parent->getLayout()); axis && axis->getAutoScale()) {
-				obj.erase("scale");
+			if (auto axis = typeinfo_cast<AxisLayout*>(parent->getLayout())) {
+				if (axis->getAutoScale())
+					obj.erase("scale");
 				obj.erase("pos");
 			} else if (auto anchor = typeinfo_cast<AnchorLayout*>(parent->getLayout()); anchor && getLayoutOptions()) {
 				obj.erase("pos");

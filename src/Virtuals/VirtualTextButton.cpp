@@ -73,9 +73,6 @@ public:
 		out += VirtualNode::emitAttributes(preJson, indent + 4);
 		out += fmt::format("{}    .intoMenuItem([](auto) {{ log::info(\"Button Pressed\"); }})\n", ind);
 		out += VirtualNode::emitAttributes(exportJSON(), indent + 4);
-		if (out.back() == '\n')
-			out.pop_back();
-
 		return out;
 	}
 

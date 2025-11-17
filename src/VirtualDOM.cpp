@@ -18,7 +18,10 @@ VirtualDOMManager::VirtualDOMManager() {
 			auto manager = VirtualDOMManager::get();
 
 			if (devtools::button((char const*)u8"\ue91e" " Code")) {
-				clipboard::write(self->emitCode() + ";");
+				auto out = self->emitCode();
+				if (out.back() == '\n')
+				    out.pop_back();
+				clipboard::write(out + ";");
 			}
 
 			devtools::sameLine();

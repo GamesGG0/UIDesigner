@@ -75,9 +75,6 @@ public:
 
         out += VirtualRGBA::emitAttributes(exportJSON(), indent + 4);
 
-        if (out.back() == '\n')
-            out.pop_back();
-
         return out;
     }
 
