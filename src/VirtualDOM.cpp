@@ -5,6 +5,18 @@
 #include <Geode/utils/coro.hpp>
 #include <Geode/utils/file.hpp>
 
+
+class VirtualRoot : public VirtualNode {
+public:
+	VirtualRoot() : VirtualNode() {}
+
+	matjson::Value exportJSON() override {
+		auto obj = VirtualNode::exportJSON();
+		obj["type"] = "Root";
+		return obj;
+	}
+};
+
 /// Virtual DOM Manager
 
 VirtualDOMManager* VirtualDOMManager::get() {
@@ -16,6 +28,7 @@ VirtualDOMManager::VirtualDOMManager() {
 	devtools::waitForDevTools(+[] {
 		devtools::registerNode<VirtualNode>(+[](VirtualNode* self) {
 			auto manager = VirtualDOMManager::get();
+			bool isRoot = typeinfo_cast<VirtualRoot*>(self);
 
 			if (devtools::button((char const*)u8"\ue91e" " Code")) {
 				auto out = self->emitCode();
@@ -26,7 +39,7 @@ VirtualDOMManager::VirtualDOMManager() {
 
 			devtools::sameLine();
 
-			if (devtools::button((char const*)u8"\ue965" " Delete")) {
+			if (!isRoot && devtools::button((char const*)u8"\ue965" " Delete")) {
 				self->removeFromParent();
 				return;
 			}
@@ -38,13 +51,20 @@ VirtualDOMManager::VirtualDOMManager() {
 			}}};
 
 			if (devtools::button((char const*)u8"\ue92a" " Import")) {
-				$async(manager, self, options) {
+				$async(=) {
 					auto json = co_await file::pick(file::PickMode::OpenFile, options);
 
-					if (json.isOk()) {
-						auto data = file::readJson(json.unwrap());
-						if (data.isOk())
-							self->CCNode::addChild(manager->createFromJSON(data.unwrap()));
+					if (!json.isOk())
+						co_return;
+					auto data = file::readJson(json.unwrap());
+					if (!data.isOk())
+						co_return;
+					
+					auto dat = data.unwrap();
+					if (isRoot && dat["type"].asString().unwrapOr("") == "Root") {
+						self->importJSON(dat);
+					} else {
+						self->CCNode::addChild(manager->createFromJSON(dat));
 					}
 				};
 			}
@@ -63,11 +83,12 @@ VirtualDOMManager::VirtualDOMManager() {
 				};
 			}
 
-			if (devtools::button((char const*)u8"\ue91e" " Clone")) {
+			if (!isRoot && devtools::button((char const*)u8"\ue91e" " Clone")) {
 				self->duplicate();
 			}
 
-			devtools::sameLine();
+			if (!isRoot)
+				devtools::sameLine();
 
 			if (devtools::button((char const*)u8"\ue94f" " Child")) {
 				self->CCNode::addChild(manager->m_creators[manager->m_creatorNames[self->m_nodeSelection]]());
@@ -83,9 +104,8 @@ VirtualDOMManager::VirtualDOMManager() {
 }
 
 void VirtualDOMManager::initialize(CCLayer* layer) {
-	auto vnode = new VirtualNode;
+	auto vnode = new VirtualRoot;
 	vnode->setAnchorPoint({0.5, 0.5});
-	vnode->setID("Root Node");
 
 	layer->addChildAtPosition(vnode, Anchor::Center);
 	layer->addChild(vnode->m_tether);
