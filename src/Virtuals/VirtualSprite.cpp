@@ -21,6 +21,7 @@ public:
         m_flipX = src.m_flipX;
         m_flipY = src.m_flipY;
 
+        setAnchorPoint({0.5, 0.5});
         replaceTether(CCSprite::createWithSpriteFrameName(m_spriteName.c_str()));
     }
 

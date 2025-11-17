@@ -80,11 +80,11 @@ public:
         constexpr static std::array alignEnums = { "kCCTextAlignmentLeft", "kCCTextAlignmentCenter", "kCCTextAlignmentRight" };
         
         if (m_alignment != kCCTextAlignmentLeft)
-            out += fmt::format("{}    .alignment({})", ind, alignEnums[m_alignment]);
-        if (m_kerning != 0)
-            out += fmt::format("{}    .kerning({})", ind, fmtFloat(m_kerning));
+            out += fmt::format("{}    .alignment({})\n", ind, alignEnums[m_alignment]);
+        if (m_kerning != 1)
+            out += fmt::format("{}    .kerning({})\n", ind, fmtFloat(m_kerning));
         if (m_breakWithoutSpace)
-            out += fmt::format("{}    .breakWithouSpace({})", ind, m_breakWithoutSpace ? "true" : "false");
+            out += fmt::format("{}    .breakWithouSpace({})\n", ind, m_breakWithoutSpace ? "true" : "false");
 
         out += VirtualRGBA::emitAttributes(exportJSON(), indent + 4);
         if (out.back() == '\n')

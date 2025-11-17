@@ -113,6 +113,10 @@ std::string VirtualNode::emitAttributes(matjson::Value json, int indent) {
 	std::string out;
 	std::string ind(indent, ' ');
 
+	if (getParent() && typeinfo_cast<AxisLayout*>(getParent()->getLayout())) {
+		json.erase("anchor");
+	}
+
 	if (auto id = json["id"].asString())
 		out += fmt::format("{}.id(\"{}\")\n", ind, *id);
 	if (auto pos = json["pos"].asArray())
@@ -198,8 +202,6 @@ std::string VirtualNode::emitAttributes(matjson::Value json, int indent) {
 	}
 
 	if (auto layoutOpts = json["layoutOpts"]; layoutOpts.get("type")) {
-		log::info("what the hell, {}", layoutOpts.dump());
-
 		auto type = layoutOpts["type"].asString().unwrapOr("AxisLayoutOptions");
 
 		out += fmt::format("{}.layoutOpts(Build<{}>::create()\n", ind, type);
@@ -247,7 +249,7 @@ std::string VirtualNode::emitAttributes(matjson::Value json, int indent) {
 		out += ")\n";
 	}
 
-	if (getChildrenCount() > 0) {
+	if (getChildrenCount() > 0 && json.get("children")) {
 		out += ind + ".children(";
 		for (auto& child : CCArrayExt<VirtualNode>(getChildren())) {
 			out += "\n" + child->emitCode(indent + 4);
@@ -582,12 +584,14 @@ $execute {
     vdom->registerType("Row Node", +[]() {
         auto node = new VirtualNode;
         node->setID("Row");
+        node->setAnchorPoint({0.5, 0.5});
         node->setLayout(RowLayout::create()->setAutoGrowAxis(0)->setAutoScale(false));
         return node;
     });
     vdom->registerType("Column Node", +[]() {
         auto node = new VirtualNode;
         node->setID("Column");
+        node->setAnchorPoint({0.5, 0.5});
         node->setLayout(ColumnLayout::create()->setAutoGrowAxis(0)->setAutoScale(false));
         return node;
     });
