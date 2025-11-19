@@ -1,4 +1,4 @@
-#include "VirtualNode.hpp"
+#include <VirtualNode.hpp>
 #include <UIBuilder.hpp>
 
 struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {

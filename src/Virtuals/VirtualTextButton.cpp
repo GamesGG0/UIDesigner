@@ -1,4 +1,4 @@
-#include "VirtualNode.hpp"
+#include <VirtualNode.hpp>
 #include <geode.devtools/include/API.hpp>
 
 class VirtualScale9Button : public VirtualNode, RegisterDOM<VirtualScale9Button, "Scale 9 Button"> {

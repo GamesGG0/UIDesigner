@@ -1,10 +1,10 @@
 #include "VirtualDOM.hpp"
-#include <Virtuals/VirtualNode.hpp>
+#include "VirtualNode.hpp"
+
 #include <geode.devtools/include/API.hpp>
 #include <geode.devtools/include/API.hpp>
 #include <Geode/utils/coro.hpp>
 #include <Geode/utils/file.hpp>
-
 
 class VirtualRoot : public VirtualNode {
 public:
@@ -91,11 +91,12 @@ VirtualDOMManager::VirtualDOMManager() {
 				devtools::sameLine();
 
 			if (devtools::button((char const*)u8"\ue94f" " Child")) {
-				self->CCNode::addChild(manager->m_creators[manager->m_creatorNames[self->m_nodeSelection]]());
+				self->CCNode::addChild(manager->m_creators[manager->m_creatorNames[self->m_extraData->m_nodeSelection]]());
 			}
 			devtools::sameLine();
-			devtools::nextItemWidth(120.0f); 
-			devtools::combo("##customnode", self->m_nodeSelection, manager->m_creatorNames);
+			devtools::nextItemWidth(120.0f);
+			log::info("what {} {}", (void*)self->m_extraData.get(), (void*)manager); 
+			devtools::combo("##customnode", self->m_extraData->m_nodeSelection, manager->m_creatorNames);
 
 			devtools::label(fmt::format("Tether Address: {}", (void*)self->m_tether.data()).c_str());
 			self->settings();

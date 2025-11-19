@@ -1,4 +1,4 @@
-#include "VirtualNode.hpp"
+#include <VirtualNode.hpp>
 #include <geode.devtools/include/API.hpp>
 #include <Geode/ui/TextInput.hpp>
 

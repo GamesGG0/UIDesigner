@@ -1,18 +1,22 @@
-#include "VirtualNode.hpp"
-#include "Geode/modify/Traits.hpp"
-#include "Geode/utils/function.hpp"
-#include "geode.devtools/include/API.hpp"
+#include <VirtualNode.hpp>
+#include <Geode/modify/Traits.hpp>
+#include <Geode/utils/function.hpp>
+#include <geode.devtools/include/API.hpp>
 
 #include <geode.devtools/include/API.hpp>
 #include <VirtualDOM.hpp>
 
-VirtualNode::VirtualNode() {
+
+
+bool VirtualNode::init() {
 	CCNode::init();
 	autorelease();
 
 	scheduleUpdate();
-
 	m_tether = CCNode::create();
+	m_extraData = std::make_unique<Impl>();
+
+	return true;
 }
 
 void VirtualNode::addTetherChild(VirtualNode* virt) {
@@ -541,12 +545,7 @@ void VirtualNode::settings() {
 	}
 }
 
-
-bool a() {
-	return geode::utils::function::Return<decltype(&a)>();
-}
-
-VirtualNode::VirtualNode(VirtualNode& src) : VirtualNode() {
+void VirtualNode::copyTraits(VirtualNode& src) {
 	src.getParent()->addChild(this);
 
 	setID(src.getID());
