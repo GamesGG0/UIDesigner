@@ -134,21 +134,21 @@ class VirtualTextInput : public VirtualNode, RegisterDOM<VirtualTextInput, "Text
 	
 		auto emitIf = [&](auto field, auto def, std::string_view code) {
 			if (field != def) {
-				out += fmt::format("{}    .{}\n", ind, code);
+				out += fmt::format("{}    .$build_wrap({})\n", ind, code);
 			}
 		};
 
-		emitIf(m_label, "", fmt::format("label(\"{}\")", m_label));
+		emitIf(m_label, "", fmt::format("setLabel(\"{}\")", m_label));
 		if (m_customFilter) {
-			emitIf(m_filter, "", fmt::format("filter(\"{}\")", m_filter));
+			emitIf(m_filter, "", fmt::format("setFilter(\"{}\")", m_filter));
 		} else {
-			emitIf(m_commonFilter, CommonFilter::Any, fmt::format("commonFilter(CommonFilter::{})", filters[static_cast<int>(m_commonFilter)]));
+			emitIf(m_commonFilter, CommonFilter::Any, fmt::format("setCommonFilter(CommonFilter::{})", filters[static_cast<int>(m_commonFilter)]));
 		}
-		emitIf(m_maxLength, 0, fmt::format("maxCharCount({})", m_maxLength));
-		emitIf(m_isPassword, false, "passwordMode(true)");
-		emitIf(m_align, TextInputAlign::Center, fmt::format("textAlign(TextInputAlign::{})", m_align == TextInputAlign::Center ? "Center" : "Left"));
-		emitIf(m_value, "", fmt::format("string(\"{}\")", m_value));
-		emitIf(getContentWidth(), 200.f, fmt::format("width({}f)", fmtFloat(getContentWidth())));
+		emitIf(m_maxLength, 0, fmt::format("setMaxCharCount({})", m_maxLength));
+		emitIf(m_isPassword, false, "setPasswordMode(true)");
+		emitIf(m_align, TextInputAlign::Center, fmt::format("setTextAlign(TextInputAlign::{})", m_align == TextInputAlign::Center ? "Center" : "Left"));
+		emitIf(m_value, "", fmt::format("setString(\"{}\")", m_value));
+		emitIf(getContentWidth(), 200.f, fmt::format("setWidth({}f)", fmtFloat(getContentWidth())));
 
 		auto json = exportJSON();
 		json.erase("size");
