@@ -95,7 +95,6 @@ VirtualDOMManager::VirtualDOMManager() {
 			}
 			devtools::sameLine();
 			devtools::nextItemWidth(120.0f);
-			log::info("what {} {}", (void*)self->m_extraData.get(), (void*)manager); 
 			devtools::combo("##customnode", self->m_extraData->m_nodeSelection, manager->m_creatorNames);
 
 			devtools::label(fmt::format("Tether Address: {}", (void*)self->m_tether.data()).c_str());
