@@ -17,16 +17,6 @@ public:
         setAnchorPoint({0.5, 0.5});
     }
 
-    VirtualLabel(VirtualLabel& src) : VirtualRGBA(src) {
-        m_text = src.m_text;
-        m_font = src.m_font;
-        m_kerning = src.m_kerning;
-        m_alignment = src.m_alignment;
-        m_breakWithoutSpace = src.m_breakWithoutSpace;
-
-        replaceTether(CCLabelBMFont::create(m_text.c_str(), m_font.c_str()));
-    }
-
     void settings() override {
         VirtualNode::settings();
 
@@ -105,10 +95,6 @@ public:
         setContentSize(m_tether->getContentSize());
 
         VirtualRGBA::updateTether();
-    }
-
-    VirtualNode* duplicate() override {
-        return new VirtualLabel(*this);
     }
 };
 

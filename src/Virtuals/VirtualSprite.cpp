@@ -16,15 +16,6 @@ public:
         setAnchorPoint({0.5, 0.5});
     }
 
-    VirtualSprite(VirtualSprite& src) : VirtualRGBA(src) {
-        m_spriteName = src.m_spriteName;
-        m_flipX = src.m_flipX;
-        m_flipY = src.m_flipY;
-
-        setAnchorPoint({0.5, 0.5});
-        replaceTether(CCSprite::createWithSpriteFrameName(m_spriteName.c_str()));
-    }
-
     void settings() override {
         VirtualNode::settings();
         m_frameDirty = devtools::property("Sprite Name", m_spriteName);
@@ -95,9 +86,5 @@ public:
 
         tether()->setFlipX(m_flipX);
         tether()->setFlipY(m_flipY);
-    }
-
-    VirtualNode* duplicate() override {
-        return new VirtualSprite(*this);
     }
 };

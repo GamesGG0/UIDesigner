@@ -545,37 +545,6 @@ void VirtualNode::settings() {
 	}
 }
 
-void VirtualNode::copyTraits(VirtualNode& src) {
-	src.getParent()->addChild(this);
-
-	setID(src.getID());
-	setPosition(src.getPosition());
-	setScaleX(src.getScaleX());
-	setScaleY(src.getScaleY());
-	setContentSize(src.getContentSize());
-	setSkewX(src.getSkewX());
-	setSkewY(src.getSkewY());
-	setRotationX(src.getRotationX());
-	setRotationY(src.getRotationY());
-	setLayout(src.getLayout());
-	setLayoutOptions(src.getLayoutOptions());
-	setZOrder(src.getZOrder());
-	setVisible(src.isVisible());
-	setTag(src.getTag());
-	ignoreAnchorPointForPosition(src.isIgnoreAnchorPointForPosition());
-	setAnchorPoint(src.getAnchorPoint());
-
-	for (auto& child : CCArrayExt<VirtualNode>(src.getChildren())) {
-		auto dup = child->duplicate();
-		dup->removeFromParentAndCleanup(false);
-		CCNode::addChild(dup);
-	}
-}
-
-VirtualNode* VirtualNode::duplicate() {
-	return new VirtualNode(*this);
-}
-
 $execute {
 	VirtualDOMManager::registerCreate<VirtualNode>("Node");
 

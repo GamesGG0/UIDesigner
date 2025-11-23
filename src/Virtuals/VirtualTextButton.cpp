@@ -22,18 +22,6 @@ public:
 		setLayout(AnchorLayout::create());
 	}
 
-	VirtualScale9Button(VirtualScale9Button& src) : VirtualNode(src) {
-		m_spriteName = src.m_spriteName;
-
-		m_sprite = CCScale9Sprite::create(m_spriteName.c_str());
-		m_sprite->setContentSize(getContentSize());
-		m_sprite->setLayoutOptions(AnchorLayoutOptions::create()->setAnchor(Anchor::Center));
-
-		replaceTether(CCMenuItemExt::createSpriteExtra(m_sprite, +[](CCMenuItemSpriteExtra* mitem) {
-			log::info("Button Pressed: ", mitem->getID());
-		}));
-	}
-
 	void settings() override {
 		VirtualNode::settings();
 
@@ -100,10 +88,6 @@ public:
 
 		if (m_sprite->getZOrder() != -1)
 			m_sprite->setZOrder(-1);
-	}
-
-	VirtualNode* duplicate() override {
-		return new VirtualScale9Button(*this);
 	}
 };
 

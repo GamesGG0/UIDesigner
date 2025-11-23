@@ -69,25 +69,6 @@ public:
 		setAnchorPoint({0.5, 0.5});
 	}
 
-	VirtualSpriteButton(VirtualSpriteButton& src) : VirtualSpriteButton() {
-		m_spriteName = src.m_spriteName;
-		m_flipX = src.m_flipX;
-		m_flipY = src.m_flipY;
-		m_relativeScale = src.m_relativeScale;
-		m_relativeOffset = src.m_relativeOffset;
-		m_baseSelection = src.m_baseSelection;
-		m_hasBase = src.m_hasBase;
-		m_bases = src.m_bases;
-
-		rebuildSprite();
-
-		replaceTether(CCMenuItemExt::createSpriteExtra(m_sprite, +[](CCMenuItemSpriteExtra* mitem) {
-			log::info("Button Pressed: {}", mitem->getID());
-		}));
-
-		setAnchorPoint({0.5, 0.5});
-	}
-
 	void rebuildSprite() {
 		auto spr = CCSprite::createWithSpriteFrameName(m_spriteName.c_str());
 		if (!spr)
@@ -339,9 +320,5 @@ public:
 
 		m_innerSprite->setFlipX(m_flipX);
 		m_innerSprite->setFlipY(m_flipY);
-	}
-
-	VirtualNode* duplicate() override {
-		return new VirtualSpriteButton(*this);
 	}
 };

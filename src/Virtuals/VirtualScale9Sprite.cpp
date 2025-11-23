@@ -12,13 +12,6 @@ public:
         setAnchorPoint({0.5, 0.5});
     }
 
-    VirtualScale9Sprite(VirtualScale9Sprite& src) : VirtualRGBA(src) {
-        m_spriteName = src.m_spriteName;
-
-        replaceTether(CCScale9Sprite::create(m_spriteName.c_str()));
-        m_tether->setContentSize(src.m_tether->getContentSize());
-    }
-
     void settings() override {
         VirtualNode::settings();
         m_frameDirty = devtools::property("Sprite Name", m_spriteName);
@@ -58,9 +51,5 @@ public:
         }
 
         VirtualRGBA::updateTether();
-    }
-
-    VirtualNode* duplicate() override {
-        return new VirtualScale9Sprite(*this);
     }
 };

@@ -11,11 +11,6 @@ public:
         setAnchorPoint({0.5, 0.5});
     }
 
-    VirtualTextArea(VirtualTextArea& src) : VirtualNode(src) {
-        m_text = src.m_text;
-        replaceTether(MDTextArea::create(m_text, src.getContentSize()));
-    }
-
     void settings() override {
         VirtualNode::settings();
         devtools::inputMultiline("Text Area", m_text);
@@ -59,9 +54,5 @@ public:
         }
 
         VirtualNode::updateTether();
-    }
-
-    VirtualNode* duplicate() override {
-        return new VirtualTextArea(*this);
     }
 };

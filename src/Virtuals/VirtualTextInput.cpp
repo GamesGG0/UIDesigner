@@ -41,19 +41,6 @@ class VirtualTextInput : public VirtualNode, RegisterDOM<VirtualTextInput, "Text
 		setAnchorPoint({0.5, 0.5});
 	}
 
-	VirtualTextInput(VirtualTextInput& src) : VirtualNode(src) {
-		m_placeholder = src.m_placeholder;
-		m_font = src.m_font;
-		m_label = src.m_label;
-		m_filter = src.m_filter;
-		m_maxLength = src.m_maxLength;
-		m_isPassword = src.m_isPassword;
-		m_align = src.m_align;
-		m_value = src.m_value;
-
-		replaceTether(TextInput::create(200, m_font.c_str()));
-	}
-
 	void settings() override {
 		VirtualNode::settings();
 
@@ -182,9 +169,5 @@ class VirtualTextInput : public VirtualNode, RegisterDOM<VirtualTextInput, "Text
 		setContentSize(tether->getContentSize());
 
 		VirtualNode::updateTether();
-	}
-
-	VirtualNode* duplicate() override {
-		return new VirtualTextInput(*this);
 	}
 };
