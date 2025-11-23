@@ -222,9 +222,6 @@ public:
 			};
 		}
 
-		if (getAnchorPoint() == ccp(0.5, 0.5))
-		    obj.erase("anchor");
-
 		return obj;
 	}
 

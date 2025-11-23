@@ -10,24 +10,24 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
 
     using VirtualNode::VirtualNode;
 
-    inline auto tether() { return typeinfo_cast<CCRGBAProtocol*>(m_tether.data()); }
+    auto tether() { return typeinfo_cast<CCRGBAProtocol*>(m_tether.data()); }
 
-    inline void setColor(const ccColor3B& color) override { m_color = color; }
-    inline const ccColor3B& getColor(void) override { return m_color; }
-    inline const ccColor3B& getDisplayedColor(void) override { return m_color; }
-    inline GLubyte getDisplayedOpacity(void) override { return m_opacity; }
-    inline void setOpacity(GLubyte opacity) override { m_opacity = opacity; }
-    inline GLubyte getOpacity(void) override { return m_opacity; }
-    inline void setOpacityModifyRGB(bool bValue) override { m_opacityModifyRGB = bValue; }
-    inline bool isOpacityModifyRGB(void) override { return m_opacityModifyRGB; }
-    inline void updateDisplayedColor(const ccColor3B& color) override { m_color = color; }
-    inline void setCascadeColorEnabled(bool cascadeColorEnabled) override { m_cascadeColorEnabled = cascadeColorEnabled; }
-    inline bool isCascadeColorEnabled(void) override { return m_cascadeColorEnabled; }
-    inline void setCascadeOpacityEnabled(bool cascadeOpacityEnabled) override { m_cascadeOpacityEnabled = cascadeOpacityEnabled; }
-    inline bool isCascadeOpacityEnabled(void) override { return m_cascadeOpacityEnabled; }
-    inline void updateDisplayedOpacity(GLubyte opacity) override { m_opacity = opacity; }
+    void setColor(const ccColor3B& color) override { m_color = color; }
+    const ccColor3B& getColor(void) override { return m_color; }
+    const ccColor3B& getDisplayedColor(void) override { return m_color; }
+    GLubyte getDisplayedOpacity(void) override { return m_opacity; }
+    void setOpacity(GLubyte opacity) override { m_opacity = opacity; }
+    GLubyte getOpacity(void) override { return m_opacity; }
+    void setOpacityModifyRGB(bool bValue) override { m_opacityModifyRGB = bValue; }
+    bool isOpacityModifyRGB(void) override { return m_opacityModifyRGB; }
+    void updateDisplayedColor(const ccColor3B& color) override { m_color = color; }
+    void setCascadeColorEnabled(bool cascadeColorEnabled) override { m_cascadeColorEnabled = cascadeColorEnabled; }
+    bool isCascadeColorEnabled(void) override { return m_cascadeColorEnabled; }
+    void setCascadeOpacityEnabled(bool cascadeOpacityEnabled) override { m_cascadeOpacityEnabled = cascadeOpacityEnabled; }
+    bool isCascadeOpacityEnabled(void) override { return m_cascadeOpacityEnabled; }
+    void updateDisplayedOpacity(GLubyte opacity) override { m_opacity = opacity; }
 
-    inline void updateTether() override {
+    void updateTether() override {
         VirtualNode::updateTether();
 
         tether()->setColor(m_color);
@@ -37,7 +37,7 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
         tether()->setOpacityModifyRGB(m_opacityModifyRGB);
     }
 
-    inline matjson::Value exportJSON() override {
+    matjson::Value exportJSON() override {
         auto obj = VirtualNode::exportJSON();
 
         if (m_color != ccc3(255, 255, 255))
@@ -55,7 +55,7 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
     
     }
 
-    inline void importJSON(matjson::Value obj) override {
+    void importJSON(matjson::Value obj) override {
         VirtualNode::importJSON(obj);
 
         m_color = ccc3(
@@ -70,7 +70,7 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
         m_opacityModifyRGB = obj["opacityModifyRGB"].asBool().unwrapOr(false);
     }
 
-    inline VirtualRGBA(VirtualRGBA& src) : VirtualNode(src) {
+    VirtualRGBA(VirtualRGBA& src) : VirtualNode(src) {
         m_color = src.m_color;
         m_opacity = src.m_opacity;
         m_cascadeColorEnabled = src.m_cascadeColorEnabled;
@@ -78,7 +78,7 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
         m_opacityModifyRGB = src.m_opacityModifyRGB;
     }
 
-    inline std::string emitAttributes(matjson::Value json, int indent = 0) {
+    std::string emitAttributes(matjson::Value json, int indent = 0) {
         std::string out;
         std::string ind(' ', indent);
 

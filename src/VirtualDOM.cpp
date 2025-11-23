@@ -84,7 +84,8 @@ VirtualDOMManager::VirtualDOMManager() {
 			}
 
 			if (!isRoot && devtools::button((char const*)u8"\ue91e" " Clone")) {
-				self->duplicate();
+				if (auto parent = typeinfo_cast<VirtualNode*>(self->getParent()))
+					parent->CCNode::addChild(manager->createFromJSON(self->exportJSON()));
 			}
 
 			if (!isRoot)
