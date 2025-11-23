@@ -1,5 +1,5 @@
 {
-	"geode": "4.9.0",
+	"geode": "4.10.0",
 	"gd": {
 		"win": "2.2074",
 		"android": "2.2074",
@@ -18,5 +18,7 @@
 			"importance": "required"
 		}
 	],
-	"api": { "include": ["include/*.hpp"] }
+	"api": { "include": ["include/*.hpp"] },
+	"resources": { "sprites": ["images/button.png"] }
+
 }

@@ -549,14 +549,14 @@ $execute {
 	VirtualDOMManager::registerCreate<VirtualNode>("Node");
 
     auto vdom = VirtualDOMManager::get();
-    vdom->registerType("Row Node", +[]() {
+    vdom->registerType("row-node", +[]() {
         auto node = new VirtualNode;
         node->setID("Row");
         node->setAnchorPoint({0.5, 0.5});
         node->setLayout(RowLayout::create()->setAutoGrowAxis(0)->setAutoScale(false));
         return node;
     });
-    vdom->registerType("Column Node", +[]() {
+    vdom->registerType("column-node", +[]() {
         auto node = new VirtualNode;
         node->setID("Column");
         node->setAnchorPoint({0.5, 0.5});

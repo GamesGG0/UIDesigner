@@ -2,7 +2,6 @@
 #include "VirtualNode.hpp"
 
 #include <geode.devtools/include/API.hpp>
-#include <geode.devtools/include/API.hpp>
 #include <Geode/utils/coro.hpp>
 #include <Geode/utils/file.hpp>
 
@@ -104,12 +103,13 @@ VirtualDOMManager::VirtualDOMManager() {
 	});
 }
 
-void VirtualDOMManager::initialize(CCLayer* layer) {
+VirtualNode* VirtualDOMManager::initialize(CCLayer* layer) {
 	auto vnode = new VirtualRoot;
 	vnode->setAnchorPoint({0.5, 0.5});
 
 	layer->addChildAtPosition(vnode, Anchor::Center);
 	layer->addChild(vnode->m_tether);
+	return vnode;
 }
 
 void VirtualDOMManager::registerType(std::string_view name, VirtualCreator ctor) {

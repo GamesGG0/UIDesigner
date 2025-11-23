@@ -70,14 +70,6 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
         m_opacityModifyRGB = obj["opacityModifyRGB"].asBool().unwrapOr(false);
     }
 
-    VirtualRGBA(VirtualRGBA& src) : VirtualNode(src) {
-        m_color = src.m_color;
-        m_opacity = src.m_opacity;
-        m_cascadeColorEnabled = src.m_cascadeColorEnabled;
-        m_cascadeOpacityEnabled = src.m_cascadeOpacityEnabled;
-        m_opacityModifyRGB = src.m_opacityModifyRGB;
-    }
-
     std::string emitAttributes(matjson::Value json, int indent = 0) {
         std::string out;
         std::string ind(' ', indent);

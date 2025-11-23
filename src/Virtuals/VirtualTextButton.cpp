@@ -97,7 +97,7 @@ $execute {
 	VirtualDOMManager::get()->registerType("Text Button", +[]() -> VirtualNode* {
 
 		auto btn = new VirtualScale9Button();
-		btn->setID("Text Button");
+		btn->setID("text-button");
 		auto label = createLabel();
 		label->setScale(0.8);
 		label->setID("Button Label");
