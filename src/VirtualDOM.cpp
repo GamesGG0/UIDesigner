@@ -82,9 +82,9 @@ VirtualDOMManager::VirtualDOMManager() {
 				};*/
 
 				file::pick(file::PickMode::SaveFile, options).listen([=](auto file) {
-					if (file.isOk()) {
-						if (file::writeToJson(file.unwrap(), self->exportJSON()).isErr()) {
-							log::warn("Failed to export to {}", file.unwrap());
+					if (file->isOk()) {
+						if (file::writeToJson(file->unwrap(), self->exportJSON()).isErr()) {
+							log::warn("Failed to export to {}", file->unwrap());
 						}
 					}
 				});
