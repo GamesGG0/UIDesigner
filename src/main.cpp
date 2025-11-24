@@ -37,6 +37,7 @@ struct DesignerLayer : public CCLayer {
 
 	void keyBackClicked() override {
 		CCDirector::sharedDirector()->popSceneWithTransition(0.5, cocos2d::kPopTransitionFade);
+		saveTemp(0.f);
 	}
 
 	void saveTemp(float) {

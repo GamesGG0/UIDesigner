@@ -71,7 +71,7 @@ VirtualDOMManager::VirtualDOMManager() {
 			devtools::sameLine();
 
 			if (devtools::button((char const*)u8"\ue967" " Export")) {
-				$async(manager, self, options) {
+				/*$async(manager, self, options) {
 					auto file = co_await file::pick(file::PickMode::SaveFile, options);
 
 					if (file.isOk()) {
@@ -79,7 +79,15 @@ VirtualDOMManager::VirtualDOMManager() {
 							log::warn("Failed to export to {}", file.unwrap());
 						}
 					}
-				};
+				};*/
+
+				file::pick(file::PickMode::SaveFile, options).listen([=](auto file) {
+					if (file.isOk()) {
+						if (file::writeToJson(file.unwrap(), self->exportJSON()).isErr()) {
+							log::warn("Failed to export to {}", file.unwrap());
+						}
+					}
+				});
 			}
 
 			if (!isRoot && devtools::button((char const*)u8"\ue91e" " Clone")) {
