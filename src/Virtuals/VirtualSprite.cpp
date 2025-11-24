@@ -35,9 +35,6 @@ public:
             obj["flipY"] = m_flipY;
         obj.erase("size");
 
-        if (getAnchorPoint() == ccp(0.5, 0.5))
-            obj.erase("anchor");
-
         return obj;
     }
 

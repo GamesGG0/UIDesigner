@@ -58,8 +58,8 @@ class VirtualSpriteButton : public VirtualNode, RegisterDOM<VirtualSpriteButton,
 	BaseType m_baseSelection = BaseType::Circle;
 	bool m_hasBase = true;
 
-	CCSprite* m_sprite;
-	CCSprite* m_innerSprite;
+	CCSprite* m_sprite = nullptr;
+	CCSprite* m_innerSprite = nullptr;
 public:
 	VirtualSpriteButton() { 
 		rebuildSprite();

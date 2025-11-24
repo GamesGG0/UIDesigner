@@ -546,16 +546,16 @@ $execute {
 	VirtualDOMManager::registerCreate<VirtualNode>("Node");
 
     auto vdom = VirtualDOMManager::get();
-    vdom->registerType("row-node", +[]() {
+    vdom->registerType("Row Node", +[]() {
         auto node = new VirtualNode;
-        node->setID("Row");
+        node->setID("row");
         node->setAnchorPoint({0.5, 0.5});
         node->setLayout(RowLayout::create()->setAutoGrowAxis(0)->setAutoScale(false));
         return node;
     });
-    vdom->registerType("column-node", +[]() {
+    vdom->registerType("Column Node", +[]() {
         auto node = new VirtualNode;
-        node->setID("Column");
+        node->setID("column");
         node->setAnchorPoint({0.5, 0.5});
         node->setLayout(ColumnLayout::create()->setAutoGrowAxis(0)->setAutoScale(false));
         return node;

@@ -5,7 +5,7 @@ class VirtualScale9Button : public VirtualNode, RegisterDOM<VirtualScale9Button,
 	std::string m_spriteName = "GJ_button_01.png";
 	bool m_frameDirty = false;
 
-	CCScale9Sprite* m_sprite;
+	CCScale9Sprite* m_sprite = nullptr;
 public:
 	VirtualScale9Button() {
 		setContentSize({ 150, 40 });
