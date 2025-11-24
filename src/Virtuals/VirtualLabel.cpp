@@ -1,5 +1,4 @@
 #include "VirtualRGBA.hpp"
-#include "geode.devtools/include/API.hpp"
 #include <geode.devtools/include/API.hpp>
 
 class VirtualLabel : public VirtualRGBA, RegisterDOM<VirtualLabel, "Label"> {
