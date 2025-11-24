@@ -1,4 +1,3 @@
-#include "VirtualDOM.hpp"
 #include "VirtualNode.hpp"
 
 #include <geode.devtools/include/API.hpp>

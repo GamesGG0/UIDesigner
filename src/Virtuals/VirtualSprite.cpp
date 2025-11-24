@@ -1,6 +1,5 @@
 #include "VirtualRGBA.hpp"
 #include <geode.devtools/include/API.hpp>
-#include <VirtualDOM.hpp>
 
 class VirtualSprite : public VirtualRGBA, RegisterDOM<VirtualSprite, "Sprite"> {
     std::string m_spriteName = "GJ_lock_001.png";

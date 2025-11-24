@@ -3,9 +3,6 @@
 #include <Geode/utils/function.hpp>
 #include <geode.devtools/include/API.hpp>
 
-#include <geode.devtools/include/API.hpp>
-#include <VirtualDOM.hpp>
-
 
 
 bool VirtualNode::init() {
