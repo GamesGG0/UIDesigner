@@ -39,7 +39,7 @@ struct DesignerLayer : public CCLayer {
 				"text": "Welcome to UI Designer!\nEnter DevTools and locate the VirtualRoot to get started.\nPress Esc to exit.",
 				"alignment": 1,
 				"anchor": [0.5, 0.5],
-				"scale": 0.45
+				"scale": [0.45, 0.45]
 			}
 			)").unwrap()));
 		}
