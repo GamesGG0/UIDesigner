@@ -31,6 +31,18 @@ struct DesignerLayer : public CCLayer {
 
 		if (auto data = file::readJson(Mod::get()->getSaveDir() / "temp.json"))
 			ret->root->importJSON(data.unwrap());
+		else {
+			log::info("yeahhhhh");
+			ret->root->CCNode::addChild(VirtualDOMManager::get()->createFromJSON(matjson::parse(R"(
+			{
+				"type": "Label",
+				"text": "Welcome to UI Designer!\nEnter DevTools and locate the VirtualRoot to get started.\nPress Esc to exit.",
+				"alignment": 1,
+				"anchor": [0.5, 0.5],
+				"scale": 0.45
+			}
+			)").unwrap()));
+		}
 
 		return ret;
 	}

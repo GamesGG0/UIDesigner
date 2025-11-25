@@ -45,4 +45,39 @@ namespace uidesigner {
 
         return formatted;
     };
+
+    inline CCSprite* createSprite(std::string const& name) {
+        auto spr = CCSprite::createWithSpriteFrameName(name.c_str());
+        if (!spr)
+            spr = CCSprite::create(name.c_str());
+        return spr;
+    }
+
+    inline std::string fmtSprite(std::string const& spriteName) {
+        if (CCSprite::createWithSpriteFrameName(spriteName.c_str()))
+            return fmt::format("Build<CCSprite>::createSpriteFrame(\"{}\")", spriteName);
+        else
+            return fmt::format("CCSprite::create(\"{}\")", spriteName);
+    }
+
+    inline std::string fmtString(std::string const& str) {
+        // replace all backslash with double backslash, all newline with \n, all double quotes with \"
+        std::string formatted;
+        for (auto c : str) {
+            switch (c) {
+                case '\\':
+                    formatted += "\\\\";
+                    break;
+                case '\n':
+                    formatted += "\\n";
+                    break;
+                case '\"':
+                    formatted += "\\\"";
+                    break;
+                default:
+                    formatted += c;
+            }
+        }
+        return fmt::format("\"{}\"", formatted);
+    }
 }

@@ -43,7 +43,7 @@ public:
         m_flipX = obj["flipX"].asBool().unwrapOr(false);
         m_flipY = obj["flipY"].asBool().unwrapOr(false);
 
-        m_tether = CCSprite::createWithSpriteFrameName(m_spriteName.c_str());
+        m_tether = createSprite(m_spriteName);
 
         VirtualRGBA::importJSON(obj);
     }
@@ -68,10 +68,7 @@ public:
 
     void updateTether() override {
         if (m_frameDirty) {
-            auto spr = CCSprite::createWithSpriteFrameName(m_spriteName.c_str());
-            if (!spr)
-                spr = CCSprite::create(m_spriteName.c_str());
-            if (spr) {
+            if (auto spr = createSprite(m_spriteName)) {
                 replaceTether(spr);
             }
         }

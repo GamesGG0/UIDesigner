@@ -20,6 +20,7 @@ This mod combined with [Geode DevTools](https://github.com/geode-sdk/devtools) p
 - Scale9Sprite Button
 - Text Button
 - Text Input
+- Toggle
 
 ## API
 

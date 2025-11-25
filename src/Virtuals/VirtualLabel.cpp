@@ -64,7 +64,7 @@ public:
 
     std::string emitCode(int indent) override {
         std::string ind(indent, ' ');
-        std::string out = fmt::format("{}Build<CCLabelBMFont>::create(\"{}\", \"{}\")\n", ind, m_text, m_font);
+        std::string out = fmt::format("{}Build<CCLabelBMFont>::create({}, \"{}\")\n", ind, fmtString(m_text), m_font);
 
         constexpr static std::array alignEnums = { "kCCTextAlignmentLeft", "kCCTextAlignmentCenter", "kCCTextAlignmentRight" };
         

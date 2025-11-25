@@ -28,9 +28,9 @@ public:
     std::string emitCode(int indent = 0) override {
         std::string ind(indent, ' ');
         std::string out = fmt::format(
-            "{}Build<MDTextArea>::create(\"{}\", CCSize({}, {})\n",
+            "{}Build<MDTextArea>::create({}, CCSize({}, {})\n",
             ind,
-            m_text,
+            fmtString(m_text),
             fmtFloat(getContentSize().width),
             fmtFloat(getContentSize().height)
         );

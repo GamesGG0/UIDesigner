@@ -120,7 +120,7 @@ class VirtualTextInput : public VirtualNode, RegisterDOM<VirtualTextInput, "Text
 
 	std::string emitCode(int indent = 0) override {
 		std::string ind(indent, ' ');
-		std::string out = fmt::format("{}Build<TextInput>::create({}f, \"{}\", \"{}\")\n", ind, fmtFloat(getContentWidth()), m_placeholder, m_font);
+		std::string out = fmt::format("{}Build<TextInput>::create({}f, {}, \"{}\")\n", ind, fmtFloat(getContentWidth()), fmtString(m_placeholder), m_font);
 	
 		auto emitIf = [&](auto field, auto def, std::string_view code) {
 			if (field != def) {
@@ -128,16 +128,16 @@ class VirtualTextInput : public VirtualNode, RegisterDOM<VirtualTextInput, "Text
 			}
 		};
 
-		emitIf(m_label, "", fmt::format("setLabel(\"{}\")", m_label));
+		emitIf(m_label, "", fmt::format("setLabel({})", fmtString(m_label)));
 		if (m_customFilter) {
-			emitIf(m_filter, "", fmt::format("setFilter(\"{}\")", m_filter));
+			emitIf(m_filter, "", fmt::format("setFilter({})", fmtString(m_filter)));
 		} else {
 			emitIf(m_commonFilter, CommonFilter::Any, fmt::format("setCommonFilter(CommonFilter::{})", filters[static_cast<int>(m_commonFilter)]));
 		}
 		emitIf(m_maxLength, 0, fmt::format("setMaxCharCount({})", m_maxLength));
 		emitIf(m_isPassword, false, "setPasswordMode(true)");
 		emitIf(m_align, TextInputAlign::Center, fmt::format("setTextAlign(TextInputAlign::{})", m_align == TextInputAlign::Center ? "Center" : "Left"));
-		emitIf(m_value, "", fmt::format("setString(\"{}\")", m_value));
+		emitIf(m_value, "", fmt::format("setString({})", fmtString(m_value)));
 		emitIf(getContentWidth(), 200.f, fmt::format("setWidth({}f)", fmtFloat(getContentWidth())));
 
 		auto json = exportJSON();

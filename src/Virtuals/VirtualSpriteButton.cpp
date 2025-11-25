@@ -70,9 +70,7 @@ public:
 	}
 
 	void rebuildSprite() {
-		auto spr = CCSprite::createWithSpriteFrameName(m_spriteName.c_str());
-		if (!spr)
-		    spr = CCSprite::create(m_spriteName.c_str());
+		auto spr = createSprite(m_spriteName);
 		if (!spr)
 			return;
 
