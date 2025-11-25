@@ -2,8 +2,8 @@
 
 ## 1.1.0
 
-- Add Toggle
-- Fix code emitting for multi-line strings
+- Add Toggle and Color Box
+- Fix code emitting for multi-line strings and RGBA nodes
 - Add default help message
 - Fix Text Input export
 

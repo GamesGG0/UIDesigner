@@ -10,9 +10,11 @@ This mod combined with [Geode DevTools](https://github.com/geode-sdk/devtools) p
 - Sprite
 - Row Node
 - Column Node
+- Color Box
 - Markdown Text Area
 - Scale9Sprite
 - Sprite Button
 - Scale9Sprite Button
 - Text Button
 - Text Input
+- Toggle

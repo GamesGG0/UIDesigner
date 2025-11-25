@@ -72,7 +72,7 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
 
     std::string emitAttributes(matjson::Value json, int indent = 0) {
         std::string out;
-        std::string ind(' ', indent);
+        std::string ind(indent, ' ');
 
         if (auto arr = json["color"]; arr.isArray()) {
             out += fmt::format("{}.color({}, {}, {})\n", ind,
@@ -82,6 +82,8 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
             );
         }
 
+        if (auto obj = json["opacity"].asInt(); obj && obj.unwrap() != 255)
+            out += fmt::format("{}.opacity({})\n", ind, obj.unwrap());
         if (auto obj = json["cascadeColorEnabled"]; obj.isBool())
             out += fmt::format("{}.cascadeColor({})\n", ind, obj.asBool().unwrap() ? "true" : "false");
         if (auto obj = json["cascadeOpacityEnabled"]; obj.isBool())
