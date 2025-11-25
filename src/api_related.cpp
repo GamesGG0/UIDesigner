@@ -15,9 +15,3 @@ void example() {
 	int b;
 	devtools::radio("hi", b, b);
 }
-
-
-#define STR_HELPER(x) #x
-#define STR(x) STR_HELPER(x)
-
-#pragma message("EXPANSION: " STR(GEODE_EVENT_EXPORT_NORES(&combo, (label, current, items, maxHeight))))

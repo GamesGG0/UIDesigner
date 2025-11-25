@@ -73,6 +73,8 @@ class VirtualTextInput : public VirtualNode, RegisterDOM<VirtualTextInput, "Text
 	matjson::Value exportJSON() override {
 		auto obj = VirtualNode::exportJSON();
 
+		obj["type"] = "Text Input";
+
 		auto setValIf = [&obj](char const* key, auto value, auto def) {
 			if (value != def)
 				obj[key] = value;
@@ -99,6 +101,7 @@ class VirtualTextInput : public VirtualNode, RegisterDOM<VirtualTextInput, "Text
 
 		m_placeholder = value["placeholder"].asString().unwrapOr("Enter text...");
 		m_font = value["font"].asString().unwrapOr("bigFont.fnt");
+		m_fontDirty = true;
 		m_label = value["label"].asString().unwrapOr("");
 
 		if (value["filter"].isString()) {
