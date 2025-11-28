@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- Add store as variable
+
 ## 1.1.0
 
 - Add Toggle and Color Box

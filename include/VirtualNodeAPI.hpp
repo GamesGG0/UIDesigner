@@ -17,6 +17,7 @@ namespace uidesigner {
         friend class VirtualDOMManager;
         struct Impl final {
             int m_nodeSelection = 0;
+            std::string m_store;
         };
         std::unique_ptr<Impl> m_extraData;
     protected:
