@@ -48,8 +48,12 @@ namespace uidesigner {
 
     inline CCSprite* createSprite(std::string const& name) {
         auto spr = CCSprite::createWithSpriteFrameName(name.c_str());
-        if (!spr)
+        if (!spr || spr->getUserObject("geode.texture-loader/fallback"))
             spr = CCSprite::create(name.c_str());
+
+        if (spr->getUserObject("geode.texture-loader/fallback"))
+            return nullptr;
+
         return spr;
     }
 

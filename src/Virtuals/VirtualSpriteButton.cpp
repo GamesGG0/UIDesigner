@@ -309,11 +309,13 @@ public:
 			}));
 		}
 		setContentSize(m_sprite->getContentSize());
-		setScale(m_tether->getScale());
 
 		VirtualNode::updateTether();
 
+		m_tether->setScale(1.0);
 		m_sprite->setScale(getScale());
+
+
 		m_sprite->setRotation(getRotation());
 
 		m_innerSprite->setFlipX(m_flipX);

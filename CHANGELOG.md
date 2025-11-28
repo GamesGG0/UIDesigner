@@ -1,8 +1,9 @@
 # Changelog
 
-## 1.0.1
+## 1.1.1
 
 - Add store as variable
+- Fix VirtualSpriteButton scaling
 
 ## 1.1.0
 
