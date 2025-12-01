@@ -83,7 +83,8 @@ void VirtualNode::updateTether() {
 	m_tether->setRotationX(getRotationX());
 	m_tether->setRotationY(getRotationY());
 
-	m_tether->setLayout(getLayout());
+	if (m_tether->getLayout() != getLayout())
+		m_tether->setLayout(getLayout());
 	m_tether->setLayoutOptions(getLayoutOptions());
 
 	// this messes with node order too much

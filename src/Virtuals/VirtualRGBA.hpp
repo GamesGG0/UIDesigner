@@ -10,7 +10,7 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
 
     using VirtualNode::VirtualNode;
 
-    auto tether() { return typeinfo_cast<CCRGBAProtocol*>(m_tether.data()); }
+    virtual CCRGBAProtocol* rgba_tether() { return typeinfo_cast<CCRGBAProtocol*>(m_tether.data()); }
 
     void setColor(const ccColor3B& color) override { m_color = color; }
     const ccColor3B& getColor(void) override { return m_color; }
@@ -30,11 +30,11 @@ struct VirtualRGBA : public VirtualNode, CCRGBAProtocol {
     void updateTether() override {
         VirtualNode::updateTether();
 
-        tether()->setColor(m_color);
-        tether()->setOpacity(m_opacity);
-        tether()->setCascadeColorEnabled(m_cascadeColorEnabled);
-        tether()->setCascadeOpacityEnabled(m_cascadeOpacityEnabled);
-        tether()->setOpacityModifyRGB(m_opacityModifyRGB);
+        rgba_tether()->setColor(m_color);
+        rgba_tether()->setOpacity(m_opacity);
+        rgba_tether()->setCascadeColorEnabled(m_cascadeColorEnabled);
+        rgba_tether()->setCascadeOpacityEnabled(m_cascadeOpacityEnabled);
+        rgba_tether()->setOpacityModifyRGB(m_opacityModifyRGB);
     }
 
     matjson::Value exportJSON() override {
