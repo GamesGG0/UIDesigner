@@ -15,6 +15,22 @@ public:
     void settings() override {
         VirtualNode::settings();
         m_frameDirty = devtools::property("Sprite Name", m_spriteName);
+        devtools::sameLine();
+		devtools::button(reinterpret_cast<const char*>(u8"\ue930"), [&]{
+            file::FilePickOptions options;
+            options.filters.push_back({"Image Files", {"*.png", "*.jpg", "*.jpeg", "*.webp", "*.pvr", "*.tga", "*.bmp"}});
+        
+            file::pick(file::PickMode::OpenFile, options).listen(
+                [this](Result<std::filesystem::path>* result) {
+                    if (result->isOk()) {
+                        auto path = result->unwrap();
+
+                        m_spriteName = path.string().c_str();
+                        replaceTether(createSprite(path.string().c_str()));
+                    }
+                }
+            );
+        });
     }
 
     matjson::Value exportJSON() override {

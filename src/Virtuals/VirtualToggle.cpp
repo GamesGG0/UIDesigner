@@ -9,7 +9,7 @@ class VirtualToggle : public VirtualNode, RegisterDOM<VirtualToggle, "Toggle"> {
 
 	CCSprite* m_onSpr = nullptr;
 	CCSprite* m_offSpr = nullptr;
- public:
+public:
  	CCMenuItemToggler* build() {
  		m_onSpr = createSprite(m_offSprite);
  		m_offSpr = createSprite(m_onSprite);
@@ -32,8 +32,43 @@ class VirtualToggle : public VirtualNode, RegisterDOM<VirtualToggle, "Toggle"> {
 
  	void settings() override {
  		VirtualNode::settings();
+
  		m_frameDirty |= devtools::property("On Sprite", m_onSprite);
+		devtools::sameLine();
+		devtools::button(reinterpret_cast<const char*>(u8"\ue930"), [&]{
+            file::FilePickOptions options;
+            options.filters.push_back({"Image Files", {"*.png", "*.jpg", "*.jpeg", "*.webp", "*.pvr", "*.tga", "*.bmp"}});
+        
+            file::pick(file::PickMode::OpenFile, options).listen(
+                [this](Result<std::filesystem::path>* result) {
+                    if (result->isOk()) {
+                        auto path = result->unwrap();
+
+                        m_offSprite = path.string().c_str();
+                        replaceTether(createSprite(path.string().c_str()));
+                    }
+                }
+            );
+        });
+
+		devtools::newLine();
  		m_frameDirty |= devtools::property("Off Sprite", m_offSprite);
+		devtools::sameLine();
+		devtools::button(reinterpret_cast<const char*>(u8"\ue930"), [&]{
+            file::FilePickOptions options;
+            options.filters.push_back({"Image Files", {"*.png", "*.jpg", "*.jpeg", "*.webp", "*.pvr", "*.tga", "*.bmp"}});
+        
+            file::pick(file::PickMode::OpenFile, options).listen(
+                [this](Result<std::filesystem::path>* result) {
+                    if (result->isOk()) {
+                        auto path = result->unwrap();
+
+                        m_offSprite = path.string().c_str();
+                        replaceTether(createSprite(path.string().c_str()));
+                    }
+                }
+            );
+        });
  
  		if (m_frameDirty) {
  			m_tether = build();
@@ -99,3 +134,4 @@ class VirtualToggle : public VirtualNode, RegisterDOM<VirtualToggle, "Toggle"> {
  		m_tether->setScale(1.0);
  	}
 };
+

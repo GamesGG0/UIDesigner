@@ -11,13 +11,31 @@ class VirtualSprite : public VirtualRGBA, RegisterDOM<VirtualSprite, "Sprite"> {
     auto tether() { return typeinfo_cast<CCSprite*>(m_tether.data()); }
 public:
     VirtualSprite() : VirtualRGBA() {
-        m_tether = CCSprite::createWithSpriteFrameName(m_spriteName.c_str());
+        //m_tether = CCSprite::createWithSpriteFrameName(m_spriteName.c_str());
+        m_tether = createSprite(m_spriteName.c_str());
         setAnchorPoint({0.5, 0.5});
     }
 
     void settings() override {
         VirtualNode::settings();
         m_frameDirty = devtools::property("Sprite Name", m_spriteName);
+        
+        devtools::sameLine();
+        devtools::button(reinterpret_cast<const char*>(u8"\ue930"), [&]{
+            file::FilePickOptions options;
+            options.filters.push_back({"Image Files", {"*.png", "*.jpg", "*.jpeg", "*.webp", "*.pvr", "*.tga", "*.bmp"}});
+        
+            file::pick(file::PickMode::OpenFile, options).listen(
+                [this](Result<std::filesystem::path>* result) {
+                    if (result->isOk()) {
+                        auto path = result->unwrap();
+
+                        m_spriteName = path.string().c_str();
+                        replaceTether(createSprite(path.string().c_str()));
+                    }
+                }
+            );
+        });
 
         devtools::property("Flip X", m_flipX);
         devtools::sameLine();

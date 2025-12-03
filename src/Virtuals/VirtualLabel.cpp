@@ -25,6 +25,23 @@ public:
 
         devtools::inputMultiline("Label Text", m_text);
         m_fontDirty = devtools::property("Font File", m_font);
+        devtools::sameLine();
+        devtools::button(reinterpret_cast<const char*>(u8"\ue930"), [&]{
+            file::FilePickOptions options;
+            options.filters.push_back({"Image Files", {"*.fnt"}});
+        
+            file::pick(file::PickMode::OpenFile, options).listen(
+                [this](Result<std::filesystem::path>* result) {
+                    if (result->isOk()) {
+                        auto path = result->unwrap();
+
+                        m_font = path.string().c_str();
+                        replaceTether(createSprite(path.string().c_str()));
+                    }
+                }
+            );
+        });
+
 
         devtools::property("Extra Kerning", m_kerning);
         devtools::combo("Alignment", m_alignment, {"Left", "Center", "Right"});

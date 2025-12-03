@@ -25,3 +25,7 @@ public:
         return output;
     }
 };
+
+auto newColorBox(){
+    return new VirtualColorBox();
+}

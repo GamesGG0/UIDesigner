@@ -22,7 +22,8 @@ namespace uidesigner {
         virtual void registerType(std::string_view name, VirtualCreator ctor);
         virtual VirtualNode* createFromJSON(matjson::Value);
 
-        template <std::derived_from<VirtualNode> T>
+        //template <std::derived_from<VirtualNode> T>
+        template <typename T>
         static int registerCreate(char const name[]) {
             VirtualDOMManager::get()->registerType(name, +[]() -> VirtualNode* { return new T(); });
             return 0;
@@ -45,11 +46,11 @@ namespace uidesigner {
 
         return formatted;
     };
-
+    
     inline CCSprite* createSprite(std::string const& name) {
-        auto spr = CCSprite::createWithSpriteFrameName(name.c_str());
+        auto spr = CCSprite::create(name.c_str());
         if (!spr)
-            spr = CCSprite::create(name.c_str());
+            spr = CCSprite::createWithSpriteFrameName(name.c_str());
         return spr;
     }
 
