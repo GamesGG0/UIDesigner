@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+- Add store as variable
+- Fix VirtualSpriteButton scaling
+
 ## 1.1.0
 
 - Add Toggle and Color Box

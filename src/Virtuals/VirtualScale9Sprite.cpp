@@ -44,8 +44,13 @@ public:
 
     void importJSON(matjson::Value obj) override {
         m_spriteName = obj["spriteName"].asString().unwrapOr("GJ_square01.png");
-        m_tether = CCScale9Sprite::create(m_spriteName.c_str());
 
+        auto spr = CCSprite::create(m_spriteName.c_str());
+        if (!spr || spr->getUserObject("geode.texture-loader/fallback")) 
+            m_spriteName = "GJ_square01.png";
+
+        
+        m_tether = CCScale9Sprite::create(m_spriteName.c_str());
         VirtualRGBA::importJSON(obj);
     }
 
@@ -61,7 +66,7 @@ public:
     void updateTether() override {
         if (m_frameDirty) {
             auto spr = CCSprite::create(m_spriteName.c_str());
-            if (spr) {
+            if (spr && !spr->getUserObject("geode.texture-loader/fallback")) {
                 replaceTether(CCScale9Sprite::create(m_spriteName.c_str()));
             }
         }

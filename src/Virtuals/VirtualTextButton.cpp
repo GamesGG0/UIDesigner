@@ -67,7 +67,7 @@ public:
 	void updateTether() override {
 		if (m_frameDirty) {
 		    auto spr = CCSprite::create(m_spriteName.c_str());
-		    if (spr) {
+		    if (spr && !spr->getUserObject("geode.texture-loader/fallback")) {
 		    	m_sprite = CCScale9Sprite::create(m_spriteName.c_str());
 		    	m_sprite->setContentSize(getContentSize());
 		    	m_sprite->setLayoutOptions(AnchorLayoutOptions::create()->setAnchor(Anchor::Center));

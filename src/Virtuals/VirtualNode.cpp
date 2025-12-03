@@ -83,7 +83,8 @@ void VirtualNode::updateTether() {
 	m_tether->setRotationX(getRotationX());
 	m_tether->setRotationY(getRotationY());
 
-	m_tether->setLayout(getLayout());
+	if (m_tether->getLayout() != getLayout())
+		m_tether->setLayout(getLayout());
 	m_tether->setLayoutOptions(getLayoutOptions());
 
 	// this messes with node order too much
@@ -120,6 +121,8 @@ std::string VirtualNode::emitAttributes(matjson::Value json, int indent) {
 
 	if (auto id = json["id"].asString())
 		out += fmt::format("{}.id(\"{}\")\n", ind, *id);
+	if (auto store = json["store"].asString())
+		out += fmt::format("{}.store({})\n", ind, store.unwrap());
 	if (auto pos = json["pos"].asArray())
 		out += fmt::format("{}.pos({}f, {}f)\n", ind, fmtFloat(pos.unwrap()[0]), fmtFloat(pos.unwrap()[1]));
 	if (auto size = json["size"].asArray())
@@ -281,6 +284,8 @@ matjson::Value VirtualNode::exportJSON() {
 
 	if (!getID().empty())
 		obj["id"] = getID();
+	if (m_extraData->m_store != "")
+		obj["store"] = m_extraData->m_store;
 	if (getRotation() != 0)
 		obj["rotation"] = getRotation();
 	if (getSkewX() != 0 || getSkewY() != 0)
@@ -411,6 +416,7 @@ void VirtualNode::importJSON(matjson::Value obj) {
 
 	setTag(obj["tag"].asInt().unwrapOr(-1));
 	setID(obj["id"].asString().unwrapOr(""));
+	m_extraData->m_store = obj["store"].asString().unwrapOr("");
 
 	setPosition(ccp(
 		obj["pos"][0].asDouble().unwrapOr(0.f),
@@ -527,6 +533,16 @@ void VirtualNode::importJSON(matjson::Value obj) {
 void VirtualNode::settings() {
 	std::string id = getID();
 	devtools::nextItemWidth(200.f);
+
+	auto prevStore = m_extraData->m_store;
+	devtools::property("Store as Var", m_extraData->m_store);
+
+	if (std::all_of(m_extraData->m_store.begin(), m_extraData->m_store.end(), [](char c) {
+		return std::isalnum(c) || c == '_';
+	}) == false || (!m_extraData->m_store.empty() && std::isdigit(m_extraData->m_store[0]))) {
+		m_extraData->m_store = prevStore;
+	}
+
 	devtools::property("Node ID", id);
 	setID(id);
 
